@@ -11,26 +11,6 @@ The official implementation of the paper "Toward Extremely Efficient Infrared Sm
 > This repository provides **clean and readable** code.
 
 ## Contents
-- [Introduction](#introduction)
-- [The Network](#the-network)
-  - [Overall Pipeline](#overall-pipeline)
-  - [Core Module](#core-module)
-- [:rocket:Installation](#installation)
-- [:bar_chart:Dataset Preparation](#dataset-preparation)
-  - [Datasets Link](#datasets-link)
-  - [File Structure](#file-structure)
-- [:fire:Train](#train)
-- [:dart:Test](#test)
-- [Benchmark and Model Zoo](#benchmark-and-model-zoo)
-  - [Quantitative Results](#quantitative-results)
-  - [Qualitative Results](#qualitative-results)
-  - [Model Zoo](#model-zoo)
-- [Citation](#citation)
-- [Contact](#contact)
-
-
-
-## Contents
 
 - [:sparkles: 1. Introduction](#sparkles-1-introduction)
 - [:building_construction: 2. The Network](#building_construction-2-the-network)
