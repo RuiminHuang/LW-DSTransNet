@@ -39,7 +39,7 @@ The official implementation of the paper "Toward Extremely Efficient Infrared Sm
   <img src="./figures/mIoU_FLOPs.png" width="500" alt="Figure1">
 </div>
 
-Tradeoff between mIoU, number of parameters (\#Params.), and floating point operations (FLOPs). Results are achieved on the NUDT-SIRST dataset~\cite{li2022dense}. FLOPs is tested with an input image at a resolution of 256 $\times 256$.
+Tradeoff between mIoU, number of parameters (\#Params.), and floating point operations (FLOPs). Results are achieved on the NUDT-SIRST dataset. FLOPs is tested with an input image at a resolution of 256 $\times 256$.
 
 ## :building_construction: 2. The Network
 
