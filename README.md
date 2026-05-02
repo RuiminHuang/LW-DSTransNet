@@ -166,13 +166,38 @@ tensorboard --port=8010 --samples_per_plugin=images=100000 --logdir=./
 
 ### :chart_with_upwards_trend: 7.1 Quantitative Results
 
+| Methods                                 | Source      | Key Parameters Configurations                                                                                               |
+| --------------------------------------- | ----------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Filter-based Methods                    |             |                                                                                                                             |
+| Max-Median \cite{deshpande1999max}      | SPIE'1999   | -$^{*}$                                                                                                                     |
+| Top-Hat \cite{bai2010analysis}          | PR'2010     | ${R}*{0}$ = 9, ${R}*{i}$ = 4                                                                                                |
+| FKRW \cite{qin2019infrared}             | TGRS'2019   | Windows size: 11, $K$ = 4, $p$ = 6, $\beta$ = 200                                                                           |
+| HVS-based Methods                       |             |                                                                                                                             |
+| MPCM \cite{wei2016multiscale}           | PR'2016     | $N = { 1, 3, ..., 9 }$, threshold $k$ = 3                                                                                   |
+| RLCM \cite{han2018infrared}             | GRSL'2018   | ${k}*{1}$ = [2, 5, 9], ${k}*{2}$ = [4, 9, 16], scale: 3, threshold $k$ = 1                                                  |
+| TLLCM \cite{han2019local}               | GRSL'2019   | Scales: [5, 7, 9], $\lambda = 0.5$, threshold $k$ = 3                                                                       |
+| ILCM \cite{han2020infrared}             | GRSL'2020   | Cell size: $3 \times 3$, threshold $k$ = 3                                                                                  |
+| GSWLCM \cite{qiu2022global}             | GRSL'2022   | Local Window Structure: [3, 5, 7, 9], $\delta$ = 0.01, $k$ = 20                                                             |
+| LRM-based Methods                       |             |                                                                                                                             |
+| IPI \cite{gao2013infrared}              | TIP'2013    | Patch size: 50, sliding step: 10, $\lambda = 1/\sqrt{\mathrm{min}(m,n)}$, $\epsilon = 10^{-7}$, $k = 8$                     |
+| RIPT \cite{dai2017reweighted}           | JSTARS'2017 | Patch size: 50, sliding step: 10, $\lambda = 2/\sqrt{\mathrm{min}(m,n)}$, $\epsilon = 10^{-2}$, $\omega = 10^{-7}$, $k = 5$ |
+| PSTNN \cite{zhang2019infrared_PSTNN}    | RS'2019     | Patch size: 40, sliding step: 40, $\lambda = 0.6/\sqrt{\mathrm{max}(n_1,n_2)\times n_3}$, $\epsilon = 10^{-7}$, $k = 2$     |
+| Deep Learning Methods (Lightweight)     |             |                                                                                                                             |
+| LW-IRSTNet \cite{kou2023lw}             | TGRS'2023   | Channels: [8, 32, 64], kernel size: [7, 7, 7, 7]                                                                            |
+| IRPruneDeXt \cite{zhang2025irprunedext} | TNNLS'2025  | -$^{*}$                                                                                                                     |
+| LW-DSTransNet-Nano                      | -           | Channels: [4, 8, 16, 32, 32], Patch size: [16, 8, 4, 2]                                                                     |
+| Deep Learning Methods (Standard)        |             |                                                                                                                             |
+| ACM \cite{dai2021asymmetric}            | WACV'2021   | Backbone: UNet, layer blocks: [3, 3, 3], channels: [8, 16, 32, 64], fuse mode: AsymBi                                       |
+| ALCNet \cite{dai2021attentional}        | TGRS'2021   | Backbone: FPN, layer blocks: [4, 4, 4], channels: [8, 16, 32, 64], fuse mode: AsymBi                                        |
+| DNANet \cite{li2022dense}               | TIP'2022    | Backbone: resnet18, layer blocks: [2, 2, 2, 2], filter: [16, 32, 64, 128, 256]                                              |
+| ISTDU-Net \cite{Hou2022ISTDUNetIS}      | GRSL'2022   | Down Channels: [16, 32, 64, 128], up channels: [512, 256, 128, 64]                                                          |
+| RDIAN \cite{sun2023receptive}           | TGRS'2023   | Channels: [32, 32, 32, 32], layer blocks: [1, 2, 2, 2], kernel size: [1, 3, 5, 7]                                           |
+| UIUNet \cite{wu2022uiu}                 | TIP'2023    | Channels: [64, 128, 256, 512], fuse mode: AsymBi                                                                            |
+| SCTransNet \cite{yuan2024sctransnet}    | TGRS'2024   | Channels: [32, 64, 128, 256], Patch size: [16, 8, 4, 2]                                                                     |
+| MLP-Net \cite{wang2024mlp}              | TGRS'2025   | Patch size: 4, embed dim: 64, layer blocks: [4, 4, 4, 4]                                                                    |
+| LW-DSTransNet-Tiny                      | -           | Channels: [8, 16, 32, 64, 64], Patch size: [16, 8, 4, 2]                                                                    |
+| LW-DSTransNet-Small                     | -           | Channels: [16, 32, 64, 128, 128], Patch size: [16, 8, 4, 2]                                                                 |
 
-| Datasets      | mIoU (x10(-2)) | nIoU (x10(-2)) | Pd (x10(-2))|  Fa (x10(-6))|
-| ------------- |:-------------:|:-----:|:-----:|:-----:|
-| SIRST         | 75.61  |  75.55 | 98.17 | 17.57 |
-| NUDT-SIRST    | 95.03  |  94.84 | 99.53 | 0.46  | 
-| IRSTD-1K      | 68.35  |  67.78 | 93.94 | 19.93 |
-| SIRST-Aug     | 74.67  |  71.18 | 99.86 | 19.54 |
 
 
 ### :framed_picture: 7.2 Qualitative Results
