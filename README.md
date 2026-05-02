@@ -193,8 +193,8 @@ tensorboard --port=8010 --samples_per_plugin=images=100000 --logdir=./
 
 
 ### :framed_picture: 7.2 Qualitative Results
-![Figure8](./figures/Figure8.png)
-2D visualization of detection results across different methods on representative images from SIRST and IRSTD1K datasets. Blue, yellow, and red circles denote correct detections, missed detections, and false alarms, respectively.
+![](./figures/visual.png)
+2D visualization of detection results across different methods on representative images from SIRST, NUDT-SIRST, and IRSTD-1k datasets. Blue, yellow, and red circles denote correct detections, missed detections, and false alarms, respectively.
 
 ### :package: 7.3 Model Zoo
 
