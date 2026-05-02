@@ -167,6 +167,7 @@ tensorboard --port=8010 --samples_per_plugin=images=100000 --logdir=./
 ### :chart_with_upwards_trend: 7.1 Quantitative Results
 
 * LW-DSTransNet-Nano
+
 | Datasets      |Params(M)|FLOPs(G)| mIoU (x10(-2)) | nIoU (x10(-2)) | Pd (x10(-2))|  Fa (x10(-6))|
 |:-------------:|:-------:|:------:|:-------------:|:-----:|:-----:|:-----:|
 | SIRST         |  0.107  |  0.156 | 75.61  |  75.55 | 98.17 | 17.57 |
@@ -174,6 +175,7 @@ tensorboard --port=8010 --samples_per_plugin=images=100000 --logdir=./
 | IRSTD-1K      |  0.107  |  0.156 | 68.35  |  67.78 | 93.94 | 19.93 |
 
 * LW-DSTransNet-Tiny
+
 | Datasets      |Params(M)|FLOPs(G)| mIoU (x10(-2)) | nIoU (x10(-2)) | Pd (x10(-2))|  Fa (x10(-6))|
 |:-------------:|:-------:|:------:|:-------------:|:-----:|:-----:|:-----:|
 | SIRST         |  0.409  |  0.581 | 75.61  |  75.55 | 98.17 | 17.57 |
@@ -182,6 +184,7 @@ tensorboard --port=8010 --samples_per_plugin=images=100000 --logdir=./
 
 
 * LW-DSTransNet-Small
+
 | Datasets      |Params(M)|FLOPs(G)| mIoU (x10(-2)) | nIoU (x10(-2)) | Pd (x10(-2))|  Fa (x10(-6))|
 |:-------------:|:-------:|:------:|:-------------:|:-----:|:-----:|:-----:|
 | SIRST         |  1.601  |  2.253 | 75.61  |  75.55 | 98.17 | 17.57 |
