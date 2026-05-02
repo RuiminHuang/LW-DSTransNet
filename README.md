@@ -41,20 +41,30 @@ The official implementation of the paper "Toward Extremely Efficient Infrared Sm
 
 Tradeoff between mIoU, number of parameters (\#Params.), and floating point operations (FLOPs). Results are achieved on the NUDT-SIRST dataset. FLOPs is tested with an input image at a resolution of 256 $\times 256$.
 
+
+
+![LW-DSTransNet](./figures/Multi-Structure.png)
+
+Network architectures and visualization results of representative IRSTD methods. (a) GSFANet. (b) SDSNet. (c) SSCFNet. (d) ISGLNet. (e) HAFNet. (f) DSTransNet and the proposed LW-DSTransNet.
+
+
+
+
+
 ## :building_construction: 2. The Network
 
 ### :repeat: 2.1 Overall Pipeline
-![Figure2](./figures/LW-DSTransNet.png)
+![LW-DSTransNet](./figures/LW-DSTransNet.png)
 Overall framework of knowledge distillation, consisting of a universal teacher network, a LW-DSTransNet student network, and three knowledge distillation strategies: TOMD, SLCD, and PMIFD.
 
 ### :jigsaw: 2.2 Core Module
-![Figure4](./figures/TOMD.png)
+![TOMD](./figures/TOMD.png)
 Overview of the TOMD Strategy. It employs a dynamic confidence mask to explicitly block harmful gradient propagation, ensuring that the student network is guided only by trustworthy knowledge.
 
-![Figure4](./figures/SLCD.png)
+![SLCD](./figures/SLCD.png)
 Overview of the SLCD Strategy. It leverages a triplet semantic topology constraint to guide the student network to learn discriminative representations that decouple the target from local background features in the feature space.
 
-![Figure4](./figures/PMIFD.png)
+![PMIFD](./figures/PMIFD.png)
 Overview of the PMIFD strategy. Through multi-stage feature alignment, it encourages the student network to capture the teacher's complete reasoning logic and enhances its capability to model small-target feature evolution.
 
 ## :rocket: 3. Installation
@@ -198,8 +208,23 @@ tensorboard --port=8010 --samples_per_plugin=images=100000 --logdir=./
 
 
 ### :framed_picture: 7.2 Qualitative Results
-![](./figures/visual.png)
+
+
+![visual](./figures/visual.png)
 2D visualization of detection results across different methods on representative images from SIRST, NUDT-SIRST, and IRSTD-1k datasets. Blue, yellow, and red circles denote correct detections, missed detections, and false alarms, respectively.
+
+
+<div align="center">
+  <img src="./figures/Inference time on Jetson Orin NX.png" width="500" alt="Figure1">
+</div>
+Inference time comparison of different models on NVIDIA Jetson Orin NX.
+
+
+<div align="center">
+  <img src="./figures/Inference time on Rockchip RK3588.png" width="500" alt="Figure1">
+</div>
+Inference time comparison of different models on Rockchip RK3588.
+
 
 ### :package: 7.3 Model Zoo
 
