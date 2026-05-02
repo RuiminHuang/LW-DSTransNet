@@ -36,21 +36,26 @@ The official implementation of the paper "Toward Extremely Efficient Infrared Sm
 ## :sparkles: 1. Introduction
 
 <div align="center">
-  <img src="./figures/Figure1.png" width="500" alt="Figure1">
+  <img src="./figures/mIoU_FLOPs.png" width="500" alt="Figure1">
 </div>
 
-The heatmaps illustrate the areas of interest for various layers within the model. Layers subjected to specific analysis are indicated by red dots beneath the figure. (a) infrared image. (b) feature extraction stage, heatmap of focused features. (c) feature selection stage. Areas marked by red borders represent the suppression of false-alarm features, and areas marked by green borders signify the enhancement of small target features. (d) feature fusion-based reconstruction stage. Attention is paid to small target features during the reconstruction process. (e) ground truth label.
+Tradeoff between mIoU, number of parameters (\#Params.), and floating point operations (FLOPs). Results are achieved on the NUDT-SIRST dataset~\cite{li2022dense}. FLOPs is tested with an input image at a resolution of 256 $\times 256$.
 
 ## :building_construction: 2. The Network
 
 ### :repeat: 2.1 Overall Pipeline
-![Figure2](./figures/Figure2.png)
-Overall architecture of the proposed DSTransNet. It incorporates three stages. The feature extraction stage is responsible for finer feature extraction. The feature selection stage aims to suppress false alarms similar to small targets and enhance real small target features. The fusion-based reconstruction stage emphasises small target features and reconstructs the final multi-scale small target mask.
+![Figure2](./figures/LW-DSTransNet.png)
+Overall framework of knowledge distillation, consisting of a universal teacher network, a LW-DSTransNet student network, and three knowledge distillation strategies: TOMD, SLCD, and PMIFD.
 
 ### :jigsaw: 2.2 Core Module
-![Figure4](./figures/Figure4.png)
-Proposed RDSF module. It serves to suppress false alarms similar to small targets and enhance real small target features.
+![Figure4](./figures/TOMD.png)
+Overview of the TOMD Strategy. It employs a dynamic confidence mask to explicitly block harmful gradient propagation, ensuring that the student network is guided only by trustworthy knowledge.
 
+![Figure4](./figures/SLCD.png)
+Overview of the SLCD Strategy. It leverages a triplet semantic topology constraint to guide the student network to learn discriminative representations that decouple the target from local background features in the feature space.
+
+![Figure4](./figures/PMIFD.png)
+Overview of the PMIFD strategy. Through multi-stage feature alignment, it encourages the student network to capture the teacher's complete reasoning logic and enhances its capability to model small-target feature evolution.
 
 ## :rocket: 3. Installation
 
