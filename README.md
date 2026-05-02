@@ -247,16 +247,7 @@ If you find this repository useful for your research, please consider citing our
 
 If you find this repository useful for your research, please consider giving it a star.
 
-<!-- [![Star History Chart](https://api.star-history.com/svg?repos=RuiminHuang/LW-DSTransNet&type=Date)](https://star-history.com/#RuiminHuang/LW-DSTransNet&Date) -->
-
-<a href="https://www.star-history.com/?repos=RuiminHuang%2FLW-DSTransNet&type=date&legend=top-left">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=RuiminHuang/LW-DSTransNet&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=RuiminHuang/LW-DSTransNet&type=date&legend=top-left" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=RuiminHuang/LW-DSTransNet&type=date&legend=top-left" />
- </picture>
-</a>
-
+[![Star History Chart](https://api.star-history.com/svg?repos=RuiminHuang/LW-DSTransNet&type=Date)](https://star-history.com/#RuiminHuang/LW-DSTransNet&Date)
 
 
 ## :email: 10. Contact
