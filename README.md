@@ -43,6 +43,18 @@ Tradeoff between mIoU, number of parameters (\#Params.), and floating point oper
 
 
 
+<div align="center">
+  <img src="./figures/Inference time on Jetson Orin NX.png" width="500" alt="Figure1">
+</div>
+Inference time comparison of different models on NVIDIA Jetson Orin NX.
+
+
+<div align="center">
+  <img src="./figures/Inference time on Rockchip RK3588.png" width="500" alt="Figure1">
+</div>
+Inference time comparison of different models on Rockchip RK3588.
+
+
 ![LW-DSTransNet](./figures/Multi-Structure.png)
 
 Network architectures and visualization results of representative IRSTD methods. (a) GSFANet. (b) SDSNet. (c) SSCFNet. (d) ISGLNet. (e) HAFNet. (f) DSTransNet and the proposed LW-DSTransNet.
@@ -72,15 +84,15 @@ Overview of the PMIFD strategy. Through multi-stage feature alignment, it encour
 * Step 1. Clone the repository
 
 ```shell
-git clone git@github.com:RuiminHuang/DSTransNet.git
-cd DSTransNet
+git clone git@github.com:RuiminHuang/LW-DSTransNet.git
+cd LW-DSTransNet
 ```
 
 * Step 2. Create environment and install dependencies
 
 ```shell
-conda create --name DSTransNet python=3.12
-conda activate DSTransNet
+conda create --name LW-DSTransNet python=3.12
+conda activate LW-DSTransNet
 conda install pytorch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 pytorch-cuda=12.1 -c pytorch -c nvidia
 pip install tensorboard==2.19.0
 pip install tqdm==4.65.0
@@ -102,9 +114,6 @@ The dataset comes from [this GitHub repository](https://github.com/GrokCV/SeRank
 * IRSTD1K Dataset
   * [Baidu Netdisk](https://pan.baidu.com/s/1nRoZu1eI9BLnpmsxw0Kdwg?pwd=grok)
   * [OneDrive](https://1drv.ms/f/s!AmElF7K4aY9pgYEepi2ipymni0amNQ?e=XZILFh)
-* SIRST-AUG Dataset
-  * [Baidu Netdisk](https://pan.baidu.com/s/1_kAocokYSclQNf_ZLWPIhQ?pwd=grok)
-  * [OneDrive](https://1drv.ms/f/s!AmElF7K4aY9pgYEfdtbrZhLsbd0ITg?e=thyA6h)
 
 
 ### :file_folder: 4.2 File Structure
@@ -128,7 +137,6 @@ The dataset comes from [this GitHub repository](https://github.com/GrokCV/SeRank
                 ......
     |-NUDT
     |-IRSTD1k
-    |-SIRSTAUG
 ```
 
 
@@ -213,17 +221,6 @@ tensorboard --port=8010 --samples_per_plugin=images=100000 --logdir=./
 ![visual](./figures/visual.png)
 2D visualization of detection results across different methods on representative images from SIRST, NUDT-SIRST, and IRSTD-1k datasets. Blue, yellow, and red circles denote correct detections, missed detections, and false alarms, respectively.
 
-
-<div align="center">
-  <img src="./figures/Inference time on Jetson Orin NX.png" width="500" alt="Figure1">
-</div>
-Inference time comparison of different models on NVIDIA Jetson Orin NX.
-
-
-<div align="center">
-  <img src="./figures/Inference time on Rockchip RK3588.png" width="500" alt="Figure1">
-</div>
-Inference time comparison of different models on Rockchip RK3588.
 
 
 ### :package: 7.3 Model Zoo
