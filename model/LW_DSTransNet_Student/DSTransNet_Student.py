@@ -1,7 +1,4 @@
 # coding=utf-8
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
 import copy
 import math
 from torch.nn import Dropout, Softmax, Conv2d, LayerNorm
@@ -9,15 +6,9 @@ from torch.nn.modules.utils import _pair
 import torch.nn as nn
 import torch
 import torch.nn.functional as F
-# import ml_collections
+
 from einops import rearrange
 import numbers
-
-import numpy as np
-
-from thop import profile
-
-from .Config import get_DSTransNet_Student_config
 
 
 
@@ -85,13 +76,10 @@ class Reconstruct(nn.Module):
     #     return out
 
 
-
-
-# spatial-embedded Single-head Channel-cross Attention (SSCA)
-# SCTransNet
-class Attention_org(nn.Module):
+# Transformer submodule of the RDSF module
+class Attention_org_v2(nn.Module):
     def __init__(self, config, vis, channel_num):
-        super(Attention_org, self).__init__()
+        super(Attention_org_v2, self).__init__()
         self.vis = vis
         self.KV_size = config.KV_size
         self.channel_num = channel_num
@@ -214,145 +202,142 @@ class Attention_org(nn.Module):
         return O1, O2, O3, O4, weights
 
 
+# Transformer submodule of the RDSF module
+class Attention_org_v1(nn.Module):
+    def __init__(self, config, vis, channel_num):
+        super(Attention_org_v1, self).__init__()
+        self.vis = vis
+        self.KV_size = config.KV_size # channel_num[0] + channel_num[1] + channel_num[2] + channel_num[3]
+        self.channel_num = channel_num # channel_num[0], channel_num[1], channel_num[2], channel_num[3]
+        self.num_attention_heads = 1
 
+        self.mhead1 = nn.Conv2d(channel_num[0], channel_num[0] * self.num_attention_heads, kernel_size=1, bias=False)
+        self.mhead2 = nn.Conv2d(channel_num[1], channel_num[1] * self.num_attention_heads, kernel_size=1, bias=False)
+        self.mhead3 = nn.Conv2d(channel_num[2], channel_num[2] * self.num_attention_heads, kernel_size=1, bias=False)
+        self.mhead4 = nn.Conv2d(channel_num[3], channel_num[3] * self.num_attention_heads, kernel_size=1, bias=False)
 
+        self.mheadq_C = nn.Conv2d(self.KV_size, self.KV_size * self.num_attention_heads, kernel_size=1, bias=False)
+        self.mheadk_C = nn.Conv2d(self.KV_size, self.KV_size * self.num_attention_heads, kernel_size=1, bias=False)
+        self.mheadv_C = nn.Conv2d(self.KV_size, self.KV_size * self.num_attention_heads, kernel_size=1, bias=False)
 
-# DSTransNet
-# class Attention_org(nn.Module):
-#     def __init__(self, config, vis, channel_num):
-#         super(Attention_org, self).__init__()
-#         self.vis = vis
-#         self.KV_size = config.KV_size # channel_num[0] + channel_num[1] + channel_num[2] + channel_num[3]
-#         self.channel_num = channel_num # channel_num[0], channel_num[1], channel_num[2], channel_num[3]
-#         self.num_attention_heads = 1
-
-#         self.mhead1 = nn.Conv2d(channel_num[0], channel_num[0] * self.num_attention_heads, kernel_size=1, bias=False)
-#         self.mhead2 = nn.Conv2d(channel_num[1], channel_num[1] * self.num_attention_heads, kernel_size=1, bias=False)
-#         self.mhead3 = nn.Conv2d(channel_num[2], channel_num[2] * self.num_attention_heads, kernel_size=1, bias=False)
-#         self.mhead4 = nn.Conv2d(channel_num[3], channel_num[3] * self.num_attention_heads, kernel_size=1, bias=False)
-
-#         self.mheadq_C = nn.Conv2d(self.KV_size, self.KV_size * self.num_attention_heads, kernel_size=1, bias=False)
-#         self.mheadk_C = nn.Conv2d(self.KV_size, self.KV_size * self.num_attention_heads, kernel_size=1, bias=False)
-#         self.mheadv_C = nn.Conv2d(self.KV_size, self.KV_size * self.num_attention_heads, kernel_size=1, bias=False)
-
-#         self.q1 = nn.Conv2d(channel_num[0] * self.num_attention_heads, 
-#                             channel_num[0] * self.num_attention_heads, 
-#                             kernel_size=3, stride=1, padding=1,
-#                             groups=channel_num[0] * self.num_attention_heads // 2,
-#                             bias=False)
-#         self.q2 = nn.Conv2d(channel_num[1] * self.num_attention_heads, 
-#                             channel_num[1] * self.num_attention_heads, 
-#                             kernel_size=3, stride=1, padding=1,
-#                             groups=channel_num[1] * self.num_attention_heads // 2,
-#                             bias=False)
-#         self.q3 = nn.Conv2d(channel_num[2] * self.num_attention_heads,
-#                             channel_num[2] * self.num_attention_heads,
-#                             kernel_size=3, stride=1, padding=1,
-#                             groups=channel_num[2] * self.num_attention_heads // 2,
-#                             bias=False)
-#         self.q4 = nn.Conv2d(channel_num[3] * self.num_attention_heads,
-#                             channel_num[3] * self.num_attention_heads,
-#                             kernel_size=3, stride=1, padding=1,
-#                             groups=channel_num[3] * self.num_attention_heads // 2,
-#                             bias=False)
-#         self.q_C = nn.Conv2d(self.KV_size * self.num_attention_heads,
-#                            self.KV_size * self.num_attention_heads,
-#                            kernel_size=3, stride=1, padding=1,
-#                            groups=self.KV_size * self.num_attention_heads,
-#                            bias=False)
-#         self.k_C = nn.Conv2d(self.KV_size * self.num_attention_heads,
-#                            self.KV_size * self.num_attention_heads,
-#                            kernel_size=3, stride=1, padding=1,
-#                            groups=self.KV_size * self.num_attention_heads,
-#                            bias=False)
-#         self.v_C = nn.Conv2d(self.KV_size * self.num_attention_heads,
-#                            self.KV_size * self.num_attention_heads,
-#                            kernel_size=3, stride=1, padding=1,
-#                            groups=self.KV_size * self.num_attention_heads,
-#                            bias=False)
+        self.q1 = nn.Conv2d(channel_num[0] * self.num_attention_heads, 
+                            channel_num[0] * self.num_attention_heads, 
+                            kernel_size=3, stride=1, padding=1,
+                            groups=channel_num[0] * self.num_attention_heads // 2,
+                            bias=False)
+        self.q2 = nn.Conv2d(channel_num[1] * self.num_attention_heads, 
+                            channel_num[1] * self.num_attention_heads, 
+                            kernel_size=3, stride=1, padding=1,
+                            groups=channel_num[1] * self.num_attention_heads // 2,
+                            bias=False)
+        self.q3 = nn.Conv2d(channel_num[2] * self.num_attention_heads,
+                            channel_num[2] * self.num_attention_heads,
+                            kernel_size=3, stride=1, padding=1,
+                            groups=channel_num[2] * self.num_attention_heads // 2,
+                            bias=False)
+        self.q4 = nn.Conv2d(channel_num[3] * self.num_attention_heads,
+                            channel_num[3] * self.num_attention_heads,
+                            kernel_size=3, stride=1, padding=1,
+                            groups=channel_num[3] * self.num_attention_heads // 2,
+                            bias=False)
+        self.q_C = nn.Conv2d(self.KV_size * self.num_attention_heads,
+                           self.KV_size * self.num_attention_heads,
+                           kernel_size=3, stride=1, padding=1,
+                           groups=self.KV_size * self.num_attention_heads,
+                           bias=False)
+        self.k_C = nn.Conv2d(self.KV_size * self.num_attention_heads,
+                           self.KV_size * self.num_attention_heads,
+                           kernel_size=3, stride=1, padding=1,
+                           groups=self.KV_size * self.num_attention_heads,
+                           bias=False)
+        self.v_C = nn.Conv2d(self.KV_size * self.num_attention_heads,
+                           self.KV_size * self.num_attention_heads,
+                           kernel_size=3, stride=1, padding=1,
+                           groups=self.KV_size * self.num_attention_heads,
+                           bias=False)
         
-#         self.CFA_psi = nn.InstanceNorm2d(self.num_attention_heads)
-#         self.CFA_softmax = Softmax(dim=3)
+        self.CFA_psi = nn.InstanceNorm2d(self.num_attention_heads)
+        self.CFA_softmax = Softmax(dim=3)
 
-#         self.SSA_psi = nn.InstanceNorm2d(self.num_attention_heads)
-#         self.SSA_softmax = Softmax(dim=3)
-
-
-#         self.project_out1 = nn.Conv2d(channel_num[0], channel_num[0], kernel_size=1, bias=False)
-#         self.project_out2 = nn.Conv2d(channel_num[1], channel_num[1], kernel_size=1, bias=False)
-#         self.project_out3 = nn.Conv2d(channel_num[2], channel_num[2], kernel_size=1, bias=False)
-#         self.project_out4 = nn.Conv2d(channel_num[3], channel_num[3], kernel_size=1, bias=False)
-
-#     def forward(self, emb1, emb2, emb3, emb4, emb_all):
-
-#         # Step1 CFA Module
-#         Q_C = self.q_C(self.mheadq_C(emb_all))# [1 480 16 16]
-#         K_C = self.k_C(self.mheadk_C(emb_all))# [1 480 16 16]
-#         V_C = self.v_C(self.mheadv_C(emb_all))# [1 480 16 16]
-#         Q_C = rearrange(Q_C, 'b (head c) h w -> b head c (h w)', head=self.num_attention_heads)# [1 1 480 256]
-#         K_C = rearrange(K_C, 'b (head c) h w -> b head c (h w)', head=self.num_attention_heads)# [1 1 480 256]
-#         V_C = rearrange(V_C, 'b (head c) h w -> b head c (h w)', head=self.num_attention_heads)# [1 1 480 256]
+        self.SSA_psi = nn.InstanceNorm2d(self.num_attention_heads)
+        self.SSA_softmax = Softmax(dim=3)
 
 
-#         Q_C = torch.nn.functional.normalize(Q_C, dim=-1)# [1 1 480 256]
-#         K_C = torch.nn.functional.normalize(K_C, dim=-1)# [1 1 480 256]
-#         ch_similarity_matrix = (Q_C @ K_C.transpose(-1, -2)) / math.sqrt(self.KV_size)# [1 1 480 256] @ [1 1 256 480] = [1 1 480 480]
-#         ch_similarity_matrix = self.CFA_softmax(self.CFA_psi(ch_similarity_matrix))# IN Feature 1, Softmax Dim 3
-#         context_layer = ch_similarity_matrix @ V_C# [1 1 480 480] @ [1 1 480 256] = [1 1 480 256]
+        self.project_out1 = nn.Conv2d(channel_num[0], channel_num[0], kernel_size=1, bias=False)
+        self.project_out2 = nn.Conv2d(channel_num[1], channel_num[1], kernel_size=1, bias=False)
+        self.project_out3 = nn.Conv2d(channel_num[2], channel_num[2], kernel_size=1, bias=False)
+        self.project_out4 = nn.Conv2d(channel_num[3], channel_num[3], kernel_size=1, bias=False)
+
+    def forward(self, emb1, emb2, emb3, emb4, emb_all):
+
+        # Step1 CFA Module
+        Q_C = self.q_C(self.mheadq_C(emb_all))# [1 480 16 16]
+        K_C = self.k_C(self.mheadk_C(emb_all))# [1 480 16 16]
+        V_C = self.v_C(self.mheadv_C(emb_all))# [1 480 16 16]
+        Q_C = rearrange(Q_C, 'b (head c) h w -> b head c (h w)', head=self.num_attention_heads)# [1 1 480 256]
+        K_C = rearrange(K_C, 'b (head c) h w -> b head c (h w)', head=self.num_attention_heads)# [1 1 480 256]
+        V_C = rearrange(V_C, 'b (head c) h w -> b head c (h w)', head=self.num_attention_heads)# [1 1 480 256]
 
 
-#         # Step2 SSA Module
-#         q1 = self.q1(self.mhead1(emb1))# [1 32 16 16]
-#         q2 = self.q2(self.mhead2(emb2))# [1 64 16 16]
-#         q3 = self.q3(self.mhead3(emb3))# [1 128 16 16]
-#         q4 = self.q4(self.mhead4(emb4))# [1 256 16 16]
-#         q1 = rearrange(q1, 'b (head c) h w -> b head c (h w)', head=self.num_attention_heads)# [1 1 32 256]
-#         q2 = rearrange(q2, 'b (head c) h w -> b head c (h w)', head=self.num_attention_heads)# [1 1 64 256]
-#         q3 = rearrange(q3, 'b (head c) h w -> b head c (h w)', head=self.num_attention_heads)# [1 1 128 256]
-#         q4 = rearrange(q4, 'b (head c) h w -> b head c (h w)', head=self.num_attention_heads)# [1 1 256 256]
+        Q_C = torch.nn.functional.normalize(Q_C, dim=-1)# [1 1 480 256]
+        K_C = torch.nn.functional.normalize(K_C, dim=-1)# [1 1 480 256]
+        ch_similarity_matrix = (Q_C @ K_C.transpose(-1, -2)) / math.sqrt(self.KV_size)# [1 1 480 256] @ [1 1 256 480] = [1 1 480 480]
+        ch_similarity_matrix = self.CFA_softmax(self.CFA_psi(ch_similarity_matrix))# IN Feature 1, Softmax Dim 3
+        context_layer = ch_similarity_matrix @ V_C# [1 1 480 480] @ [1 1 480 256] = [1 1 480 256]
+
+
+        # Step2 SSA Module
+        q1 = self.q1(self.mhead1(emb1))# [1 32 16 16]
+        q2 = self.q2(self.mhead2(emb2))# [1 64 16 16]
+        q3 = self.q3(self.mhead3(emb3))# [1 128 16 16]
+        q4 = self.q4(self.mhead4(emb4))# [1 256 16 16]
+        q1 = rearrange(q1, 'b (head c) h w -> b head c (h w)', head=self.num_attention_heads)# [1 1 32 256]
+        q2 = rearrange(q2, 'b (head c) h w -> b head c (h w)', head=self.num_attention_heads)# [1 1 64 256]
+        q3 = rearrange(q3, 'b (head c) h w -> b head c (h w)', head=self.num_attention_heads)# [1 1 128 256]
+        q4 = rearrange(q4, 'b (head c) h w -> b head c (h w)', head=self.num_attention_heads)# [1 1 256 256]
         
         
-#         q1 = torch.nn.functional.normalize(q1, dim=-1)# [1 1 32 256]
-#         q2 = torch.nn.functional.normalize(q2, dim=-1)# [1 1 64 256]
-#         q3 = torch.nn.functional.normalize(q3, dim=-1)# [1 1 128 256]
-#         q4 = torch.nn.functional.normalize(q4, dim=-1)# [1 1 256 256]
+        q1 = torch.nn.functional.normalize(q1, dim=-1)# [1 1 32 256]
+        q2 = torch.nn.functional.normalize(q2, dim=-1)# [1 1 64 256]
+        q3 = torch.nn.functional.normalize(q3, dim=-1)# [1 1 128 256]
+        q4 = torch.nn.functional.normalize(q4, dim=-1)# [1 1 256 256]
 
 
-#         attn1 = (q1 @ context_layer.transpose(-1, -2)) / math.sqrt(self.KV_size)# [1 1 32 256] @ [1 1 256 480] = [1 1 32 480]
-#         attn2 = (q2 @ context_layer.transpose(-1, -2)) / math.sqrt(self.KV_size)# [1 1 64 256] @ [1 1 256 480] = [1 1 64 480]
-#         attn3 = (q3 @ context_layer.transpose(-1, -2)) / math.sqrt(self.KV_size)# [1 1 128 256] @ [1 1 256 480] = [1 1 128 480]
-#         attn4 = (q4 @ context_layer.transpose(-1, -2)) / math.sqrt(self.KV_size)# [1 1 256 256] @ [1 1 256 480] = [1 1 256 480]
+        attn1 = (q1 @ context_layer.transpose(-1, -2)) / math.sqrt(self.KV_size)# [1 1 32 256] @ [1 1 256 480] = [1 1 32 480]
+        attn2 = (q2 @ context_layer.transpose(-1, -2)) / math.sqrt(self.KV_size)# [1 1 64 256] @ [1 1 256 480] = [1 1 64 480]
+        attn3 = (q3 @ context_layer.transpose(-1, -2)) / math.sqrt(self.KV_size)# [1 1 128 256] @ [1 1 256 480] = [1 1 128 480]
+        attn4 = (q4 @ context_layer.transpose(-1, -2)) / math.sqrt(self.KV_size)# [1 1 256 256] @ [1 1 256 480] = [1 1 256 480]
 
-#         attention_probs1 = self.SSA_softmax(self.SSA_psi(attn1))# IN Feature 1, Softmax Dim 3
-#         attention_probs2 = self.SSA_softmax(self.SSA_psi(attn2))# IN Feature 1, Softmax Dim 3
-#         attention_probs3 = self.SSA_softmax(self.SSA_psi(attn3))# IN Feature 1, Softmax Dim 3
-#         attention_probs4 = self.SSA_softmax(self.SSA_psi(attn4))# IN Feature 1, Softmax Dim 3
+        attention_probs1 = self.SSA_softmax(self.SSA_psi(attn1))# IN Feature 1, Softmax Dim 3
+        attention_probs2 = self.SSA_softmax(self.SSA_psi(attn2))# IN Feature 1, Softmax Dim 3
+        attention_probs3 = self.SSA_softmax(self.SSA_psi(attn3))# IN Feature 1, Softmax Dim 3
+        attention_probs4 = self.SSA_softmax(self.SSA_psi(attn4))# IN Feature 1, Softmax Dim 3
 
-#         out1 = (attention_probs1 @ context_layer)# [1 1 32 480] @ [1 1 480 256] = [1 1 32 256]
-#         out2 = (attention_probs2 @ context_layer)# [1 1 64 480] @ [1 1 480 256] = [1 1 64 256]
-#         out3 = (attention_probs3 @ context_layer)# [1 1 128 480] @ [1 1 480 256] = [1 1 128 256]
-#         out4 = (attention_probs4 @ context_layer)# [1 1 256 480] @ [1 1 480 256] = [1 1 256 256]
+        out1 = (attention_probs1 @ context_layer)# [1 1 32 480] @ [1 1 480 256] = [1 1 32 256]
+        out2 = (attention_probs2 @ context_layer)# [1 1 64 480] @ [1 1 480 256] = [1 1 64 256]
+        out3 = (attention_probs3 @ context_layer)# [1 1 128 480] @ [1 1 480 256] = [1 1 128 256]
+        out4 = (attention_probs4 @ context_layer)# [1 1 256 480] @ [1 1 480 256] = [1 1 256 256]
 
 
-#         # Step3 output process
-#         out_1 = out1.mean(dim=1)# [1 32 256]
-#         out_2 = out2.mean(dim=1)# [1 64 256]
-#         out_3 = out3.mean(dim=1)# [1 128 256]
-#         out_4 = out4.mean(dim=1)# [1 256 256]
+        # Step3 output process
+        out_1 = out1.mean(dim=1)# [1 32 256]
+        out_2 = out2.mean(dim=1)# [1 64 256]
+        out_3 = out3.mean(dim=1)# [1 128 256]
+        out_4 = out4.mean(dim=1)# [1 256 256]
 
-#         b, c, h, w = emb1.shape
-#         out_1 = rearrange(out_1, 'b  c (h w) -> b c h w', h=h, w=w)# [1 32 16 16]
-#         out_2 = rearrange(out_2, 'b  c (h w) -> b c h w', h=h, w=w)# [1 64 16 16]
-#         out_3 = rearrange(out_3, 'b  c (h w) -> b c h w', h=h, w=w)# [1 128 16 16]
-#         out_4 = rearrange(out_4, 'b  c (h w) -> b c h w', h=h, w=w)# [1 256 16 16]
+        b, c, h, w = emb1.shape
+        out_1 = rearrange(out_1, 'b  c (h w) -> b c h w', h=h, w=w)# [1 32 16 16]
+        out_2 = rearrange(out_2, 'b  c (h w) -> b c h w', h=h, w=w)# [1 64 16 16]
+        out_3 = rearrange(out_3, 'b  c (h w) -> b c h w', h=h, w=w)# [1 128 16 16]
+        out_4 = rearrange(out_4, 'b  c (h w) -> b c h w', h=h, w=w)# [1 256 16 16]
 
-#         O1 = self.project_out1(out_1)# [1 32 16 16]
-#         O2 = self.project_out2(out_2)# [1 64 16 16]
-#         O3 = self.project_out3(out_3)# [1 128 16 16]
-#         O4 = self.project_out4(out_4)# [1 256 16 16]
-#         weights = None
+        O1 = self.project_out1(out_1)# [1 32 16 16]
+        O2 = self.project_out2(out_2)# [1 64 16 16]
+        O3 = self.project_out3(out_3)# [1 128 16 16]
+        O4 = self.project_out4(out_4)# [1 256 16 16]
+        weights = None
 
-#         return O1, O2, O3, O4, weights
+        return O1, O2, O3, O4, weights
 
 
 
@@ -431,7 +416,7 @@ class eca_layer_2d(nn.Module):
         out = out.view(x.size(0), x.size(1), 1, 1)
         return out * x
 
-# Complementary Feed-forward Network (CFN)
+# CFN submodule of the RDSF module
 class FeedForward(nn.Module):
     def __init__(self, dim, ffn_expansion_factor, bias):
         super(FeedForward, self).__init__()
@@ -459,7 +444,7 @@ class FeedForward(nn.Module):
         return x
 
 
-#  Spatial-channel Cross Transformer Block (SCTB)
+# RDSF module in skip connection
 class Block_ViT(nn.Module):
     def __init__(self, config, vis, channel_num):
         super(Block_ViT, self).__init__()
@@ -469,7 +454,7 @@ class Block_ViT(nn.Module):
         self.attn_norm4 = LayerNorm3d(channel_num[3], LayerNorm_type='WithBias')
         self.attn_norm = LayerNorm3d(config.KV_size, LayerNorm_type='WithBias')
 
-        self.channel_attn = Attention_org(config, vis, channel_num)
+        self.channel_attn = Attention_org_v2(config, vis, channel_num)
 
         self.ffn_norm1 = LayerNorm3d(channel_num[0], LayerNorm_type='WithBias')
         self.ffn_norm2 = LayerNorm3d(channel_num[1], LayerNorm_type='WithBias')
@@ -582,7 +567,7 @@ class ChannelTransformer(nn.Module):
 
         return x1, x2, x3, x4, attn_weights
 
-# up of SCTransNet starts here
+
 def get_activation(activation_type):
     activation_type = activation_type.lower()
     if hasattr(nn, activation_type):
@@ -621,6 +606,7 @@ class Flatten(nn.Module):
         return x.view(x.size(0), -1)
 
 
+# CCA Module in decoder
 class CCA(nn.Module):
     def __init__(self, F_g, F_x):
         super().__init__()
@@ -657,7 +643,7 @@ class UpBlock_attention(nn.Module):
         x = torch.cat([skip_x_att, up], dim=1)  # dim 1 is the channel dimension
         return self.nConvs(x)
 
-
+# Resnet block in encoder
 class Res_block(nn.Module):
     def __init__(self, in_channels, out_channels, stride=1):
         super(Res_block, self).__init__()
