@@ -146,6 +146,8 @@ Before running the code, make sure to update the dataset path in the config file
 
 ## :fire: 5. Train
 
+> For convenience, you can directly test the model with our pre-trained weights from the [Model Zoo](#package-73-model-zoo).
+
 * Step0: Train teacher network
 
 For example, train teacher network DSTransNet on NUDT-SIRST dataset.
@@ -165,6 +167,8 @@ python Step1_train_LW_DS_TransNet_Student_Nano_NUDT.py
 
 
 ## :dart: 6. Test
+
+> For convenience, you can directly test the model with our pre-trained weights from the [Model Zoo](#package-73-model-zoo).
 
 * Step2： Test student network
 
