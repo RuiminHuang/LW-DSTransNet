@@ -6,7 +6,7 @@ from model.model import DS_TransNet_Student, DS_TransNet_Student_v5, DS_TransNet
 if __name__ == '__main__':
     
     # LW-DSTransNet-Nano
-    model = DS_TransNet_Student(mode='train')
+    model = DS_TransNet_Student(mode='test')
     input_tensor = torch.randn( (1, 1, 256, 256) )
     flops, params = profile(model, (input_tensor,))
     print("-" * 50)
@@ -14,7 +14,7 @@ if __name__ == '__main__':
     print('FLOPs = ' + str(flops / 1000 ** 3) + ' G')
 
     # LW-DSTransNet-Tiny
-    model = DS_TransNet_Student_v5(mode='train')
+    model = DS_TransNet_Student_v5(mode='test')
     input_tensor = torch.randn( (1, 1, 256, 256) )
     flops, params = profile(model, (input_tensor,))
     print("-" * 50)
@@ -22,7 +22,7 @@ if __name__ == '__main__':
     print('FLOPs = ' + str(flops / 1000 ** 3) + ' G')
 
     # LW-DSTransNet-Small
-    model = DS_TransNet_Student_v34(mode='train')
+    model = DS_TransNet_Student_v34(mode='test')
     input_tensor = torch.randn( (1, 1, 256, 256) )
     flops, params = profile(model, (input_tensor,))
     print("-" * 50)
