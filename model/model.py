@@ -12,8 +12,8 @@ from thop import profile
 
 
 # SCTransNet as Teacher
-from .SCTransNet_Teacher_Github.SCTransNet import SCTransNet as SCTransNet_Github_Teacher
-from .SCTransNet_Teacher_Github.Config import get_SCTrans_config as get_SCTrans_config_Github_Teacher
+from .SCTransNet_Teacher.SCTransNet import SCTransNet as SCTransNet_Github_Teacher
+from .SCTransNet_Teacher.Config import get_SCTrans_config as get_SCTrans_config_Github_Teacher
 
 
 # DSTransNet as Teacher
@@ -24,16 +24,16 @@ from .DSTransNet_Teacher.Config import get_DSTransNet_Teacher_config
 # Config of Student
 # ----------------------------------------------------------------------------
 
-from .DSTransNet_Student.DSTransNet_Student import DSTransNet_Student
+from .LW_DSTransNet_Student.DSTransNet_Student import DSTransNet_Student
 # LW-DSTransNet-Nano as Student
-from .DSTransNet_Student.Config import get_DSTransNet_Student_config
+from .LW_DSTransNet_Student.Config import get_DSTransNet_Student_config
 # LW-DSTransNet-Tiny as Student
-from .DSTransNet_Student.Config import get_DSTransNet_Student_config_v5
+from .LW_DSTransNet_Student.Config import get_DSTransNet_Student_config_v5
 
 
-from .DSTransNet_Student.DSTransNet_Student import DSTransNet_Student_v34
+from .LW_DSTransNet_Student.DSTransNet_Student import DSTransNet_Student_v34
 # LW-DSTransNet-Small as Student
-from .DSTransNet_Student.Config import get_DSTransNet_Student_config_v34
+from .LW_DSTransNet_Student.Config import get_DSTransNet_Student_config_v34
 
 
 
