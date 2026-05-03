@@ -38,63 +38,6 @@ def get_DSTransNet_Student_config_v5():
     return config
 
 
-
-def get_DSTransNet_Student_config_v31():
-    config = ml_collections.ConfigDict()
-    config.transformer = ml_collections.ConfigDict()
-    config.KV_size = 60  # KV_size = 32+64+128+256   # 二、8+16+32+64=120    60   120
-    config.transformer.num_heads = 4
-    config.transformer.num_layers = 2                  # 三、改成了1
-    config.patch_sizes = [16, 8, 4, 2]
-    config.base_channels = 4  # base channel of U-Net     # 一、   4  8
-    config.n_classes = 1
-
-    # ********** unused **********
-    config.transformer.embeddings_dropout_rate = 0.1
-    config.transformer.attention_dropout_rate = 0.1
-    config.transformer.dropout_rate = 0
-    return config
-
-
-
-
-def get_DSTransNet_Student_config_v32():
-    config = ml_collections.ConfigDict()
-    config.transformer = ml_collections.ConfigDict()
-    config.KV_size = 60  # KV_size = 32+64+128+256   # 二、8+16+32+64=120    60   120
-    config.transformer.num_heads = 4
-    config.transformer.num_layers = 3                  # 三、改成了1
-    config.patch_sizes = [16, 8, 4, 2]
-    config.base_channels = 4  # base channel of U-Net     # 一、   4  8
-    config.n_classes = 1
-
-    # ********** unused **********
-    config.transformer.embeddings_dropout_rate = 0.1
-    config.transformer.attention_dropout_rate = 0.1
-    config.transformer.dropout_rate = 0
-    return config
-
-
-
-def get_DSTransNet_Student_config_v33():
-    config = ml_collections.ConfigDict()
-    config.transformer = ml_collections.ConfigDict()
-    config.KV_size = 60  # KV_size = 32+64+128+256   # 二、8+16+32+64=120    60   120
-    config.transformer.num_heads = 4
-    config.transformer.num_layers = 4                  # 三、改成了1
-    config.patch_sizes = [16, 8, 4, 2]
-    config.base_channels = 4  # base channel of U-Net     # 一、   4  8
-    config.n_classes = 1
-
-    # ********** unused **********
-    config.transformer.embeddings_dropout_rate = 0.1
-    config.transformer.attention_dropout_rate = 0.1
-    config.transformer.dropout_rate = 0
-    return config
-
-
-
-
 def get_DSTransNet_Student_config_v34():
     config = ml_collections.ConfigDict()
     config.transformer = ml_collections.ConfigDict()
