@@ -157,7 +157,7 @@ python Step0_train_DS_TransNet_Teacher_NUDT.py
 
 * Step1: Train student network
 
-For example, train student LW-DSTransNet-Nano on the NUDT-SIRST dataset with DSTransNet as the teacher network.
+For example, train student network LW-DSTransNet-Nano on the NUDT-SIRST dataset with DSTransNet as the teacher network.
 
 ```shell
 python Step1_train_LW_DS_TransNet_Student_Nano_NUDT.py
@@ -168,7 +168,7 @@ python Step1_train_LW_DS_TransNet_Student_Nano_NUDT.py
 
 * Step2： Test student network
 
-For example, test LW-DSTransNet-Nano on the NUDT-SIRST dataset.
+For example, test student network LW-DSTransNet-Nano on the NUDT-SIRST dataset.
 
 ```shell
 python Step2_test_LW_DS_TransNet_Student_Nano_NUDT.py
