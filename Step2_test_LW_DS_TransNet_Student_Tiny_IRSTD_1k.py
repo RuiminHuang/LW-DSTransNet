@@ -30,14 +30,12 @@ def parse_args():
     
     # log
     parser.add_argument('--log_root', type=str, default="logs", help='log dir')
-    parser.add_argument('--exp_name', type=str, default="DS_TransNet_Student_v45_IRSTD_1k", help='experiment name')
+    parser.add_argument('--exp_name', type=str, default="LW_DS_TransNet_Student_Tiny_IRSTD_1k", help='experiment name')
     parser.add_argument('--phase_name', type=str, default="test", help='phase name')
     parser.add_argument('--log_name', type=str, default="log.log", help='log name')
 
     # testing parameters
-    # parser.add_argument('--weight_path', type=str, default="./logs/DS_TransNet/train/20250318003841/best_miou.pth", help='weight for testing')# NUAA_SIRST
-    parser.add_argument('--weight_path', type=str, default="./logs/DS_TransNet_Student_v45_IRSTD_1k/train/20260420210140/best_miou.pth", help='weight for testing')# NUDT
-    # parser.add_argument('--weight_path', type=str, default="./logs/DS_TransNet/train/20250312104502/best_miou.pth", help='weight for testing')# IRSTD_1k
+    parser.add_argument('--weight_path', type=str, default="./logs/LW_DS_TransNet_Student_Tiny_IRSTD_1k/train/20260420210140/best_miou.pth", help='weight for testing')
 
     parser.add_argument('--batch_size', type=int, default=1, help='batch_size for training')# must be 1 in inference stage & considering saveing image
     

@@ -61,16 +61,16 @@ def parse_args():
     
     # log
     parser.add_argument('--log_root', type=str, default="logs", help='log dir')
-    parser.add_argument('--exp_name', type=str, default="DS_TransNet_Student_v46_IRSTD_1k", help='experiment name')
+    parser.add_argument('--exp_name', type=str, default="LW_DS_TransNet_Student_Small_NUAA", help='experiment name')
     parser.add_argument('--phase_name', type=str, default="train", help='phase name')
     parser.add_argument('--log_name', type=str, default="log.log", help='log name')
 
     # training parameters
     parser.add_argument('--batch_size', type=int, default=4, help='batch_size for training')
-    parser.add_argument('--teacher_weight_path', type=str, default="logs/DS_TransNet_Teacher_IRSTD_1k/train/20260420024050/best_miou.pth", help='weight for testing')
+    parser.add_argument('--teacher_weight_path', type=str, default="logs/DS_TransNet_Teacher_NUAA/train/20260420023404/best_miou.pth", help='weight for testing')
 
     # environment
-    parser.add_argument('--gpu_ids', type=str, default='3', help='gpu ids: e.g. 0  0,1,2, 0,2. use -1 for CPU')
+    parser.add_argument('--gpu_ids', type=str, default='1', help='gpu ids: e.g. 0  0,1,2, 0,2. use -1 for CPU')
     parser.add_argument("--seed", type=int, default=3407, help="Torch seed 3407 is all you need")
 
 
@@ -115,12 +115,12 @@ class Trainer(object):
         self.args = args
 
 
-        # self.trainset = GrokCV_NUAA_SIRST(mode='train')
-        # self.valset = GrokCV_NUAA_SIRST(mode='test')
+        self.trainset = GrokCV_NUAA_SIRST(mode='train')
+        self.valset = GrokCV_NUAA_SIRST(mode='test')
         # self.trainset = GrokCV_NUDT_SIRST(mode='train')
         # self.valset = GrokCV_NUDT_SIRST(mode='test')
-        self.trainset = GrokCV_IRSTD_1k(mode='train')
-        self.valset = GrokCV_IRSTD_1k(mode='test')
+        # self.trainset = GrokCV_IRSTD_1k(mode='train')
+        # self.valset = GrokCV_IRSTD_1k(mode='test')
         # self.trainset = GrokCV_SIRST_Aug(mode='train')
         # self.valset = GrokCV_SIRST_Aug(mode='test')
         

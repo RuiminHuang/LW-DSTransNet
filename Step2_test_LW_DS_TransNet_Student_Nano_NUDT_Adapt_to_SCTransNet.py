@@ -30,20 +30,19 @@ def parse_args():
     
     # log
     parser.add_argument('--log_root', type=str, default="logs", help='log dir')
-    parser.add_argument('--exp_name', type=str, default="DS_TransNet_Student_v44_IRSTD_1k", help='experiment name')
+    parser.add_argument('--exp_name', type=str, default="LW_DS_TransNet_Student_Nano_NUDT_Adapt_to_SCTransNet", help='experiment name')
     parser.add_argument('--phase_name', type=str, default="test", help='phase name')
     parser.add_argument('--log_name', type=str, default="log.log", help='log name')
 
     # testing parameters
     # parser.add_argument('--weight_path', type=str, default="./logs/DS_TransNet/train/20250318003841/best_miou.pth", help='weight for testing')# NUAA_SIRST
-    parser.add_argument('--weight_path', type=str, default="./logs/DS_TransNet_Student_v44_IRSTD_1k/train/20260420205700/best_miou.pth", help='weight for testing')# NUDT 0.8732
-    # parser.add_argument('--weight_path', type=str, default="./logs/DS_TransNet_Student_v4_NUDT/train/20260330154601/best_miou.pth", help='weight for testing')# NUDT 0.8678
+    parser.add_argument('--weight_path', type=str, default="./logs/LW_DS_TransNet_Student_Nano_NUDT_Adapt_to_SCTransNet/train/20260416102410/best_nIoU.pth", help='weight for testing')# NUDT
     # parser.add_argument('--weight_path', type=str, default="./logs/DS_TransNet/train/20250312104502/best_miou.pth", help='weight for testing')# IRSTD_1k
 
     parser.add_argument('--batch_size', type=int, default=1, help='batch_size for training')# must be 1 in inference stage & considering saveing image
     
     # environment
-    parser.add_argument('--gpu_ids', type=str, default='3', help='gpu ids: e.g. 0  0,1,2, 0,2. use -1 for CPU')
+    parser.add_argument('--gpu_ids', type=str, default='0', help='gpu ids: e.g. 0  0,1,2, 0,2. use -1 for CPU')
     parser.add_argument("--seed", type=int, default=3407, help="Torch seed 3407 is all you need")
 
     args = parser.parse_args()
@@ -58,10 +57,10 @@ class Tester(object):
 
         # self.trainset = GrokCV_NUAA_SIRST(mode='train')
         # self.valset = GrokCV_NUAA_SIRST(mode='test')
-        # self.trainset = GrokCV_NUDT_SIRST(mode='train')
-        # self.valset = GrokCV_NUDT_SIRST(mode='test')
-        self.trainset = GrokCV_IRSTD_1k(mode='train')
-        self.valset = GrokCV_IRSTD_1k(mode='test')
+        self.trainset = GrokCV_NUDT_SIRST(mode='train')
+        self.valset = GrokCV_NUDT_SIRST(mode='test')
+        # self.trainset = GrokCV_IRSTD_1k(mode='train')
+        # self.valset = GrokCV_IRSTD_1k(mode='test')
 
         
         

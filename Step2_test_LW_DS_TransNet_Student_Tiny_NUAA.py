@@ -4,7 +4,7 @@ import torch
 import torch.utils.data as Data
 from data.data import DataLoaderX, GrokCV_NUAA_SIRST, GrokCV_NUDT_SIRST, GrokCV_IRSTD_1k, GrokCV_SIRST_Aug
 
-from model.model import DS_TransNet_Student_v34
+from model.model import DS_TransNet_Student, DS_TransNet_Student_v5
 from model.model_utils.weight_init import weight_init_normal
 from model.model_utils.optimizer_set import optimizer_set_adam, optimizer_set_adagrad, optimizer_set_sgd
 from model.model_utils.lr_scheduler import lr_scheduler_WarmDecayLR, lr_scheduler_WarmConstantDecayLR, lr_scheduler_MultiStepLR
@@ -30,19 +30,17 @@ def parse_args():
     
     # log
     parser.add_argument('--log_root', type=str, default="logs", help='log dir')
-    parser.add_argument('--exp_name', type=str, default="DS_TransNet_Student_v43_NUAA", help='experiment name')
+    parser.add_argument('--exp_name', type=str, default="LW_DS_TransNet_Student_Tiny_NUAA", help='experiment name')
     parser.add_argument('--phase_name', type=str, default="test", help='phase name')
     parser.add_argument('--log_name', type=str, default="log.log", help='log name')
 
     # testing parameters
-    # parser.add_argument('--weight_path', type=str, default="./logs/DS_TransNet/train/20250318003841/best_miou.pth", help='weight for testing')# NUAA_SIRST
-    parser.add_argument('--weight_path', type=str, default="./logs/DS_TransNet_Student_v43_NUAA/train/20260420205053/best_miou.pth", help='weight for testing')# NUDT
-    # parser.add_argument('--weight_path', type=str, default="./logs/DS_TransNet/train/20250312104502/best_miou.pth", help='weight for testing')# IRSTD_1k
+    parser.add_argument('--weight_path', type=str, default="./logs/LW_DS_TransNet_Student_Tiny_NUAA/train/20260420204444/best_miou.pth", help='weight for testing')
 
     parser.add_argument('--batch_size', type=int, default=1, help='batch_size for training')# must be 1 in inference stage & considering saveing image
     
     # environment
-    parser.add_argument('--gpu_ids', type=str, default='2', help='gpu ids: e.g. 0  0,1,2, 0,2. use -1 for CPU')
+    parser.add_argument('--gpu_ids', type=str, default='1', help='gpu ids: e.g. 0  0,1,2, 0,2. use -1 for CPU')
     parser.add_argument("--seed", type=int, default=3407, help="Torch seed 3407 is all you need")
 
     args = parser.parse_args()
@@ -89,7 +87,7 @@ class Tester(object):
 
         # model init
 
-        self.net = DS_TransNet_Student_v34(mode='test')
+        self.net = DS_TransNet_Student_v5(mode='test')
         self.net.model.load_state_dict(torch.load(args.weight_path, weights_only=True), strict=True)# method 1: load dict only
         # self.net.model = torch.load(args.weight_path)# method 2: load all model
         # self.net.load_state_dict(torch.load(args.weight_path)['state_dict'])# method 3: only used in SC_TransNet pre_trained model

@@ -61,7 +61,7 @@ def parse_args():
     
     # log
     parser.add_argument('--log_root', type=str, default="logs", help='log dir')
-    parser.add_argument('--exp_name', type=str, default="DS_TransNet_Student_v41_NUAA", help='experiment name')
+    parser.add_argument('--exp_name', type=str, default="LW_DS_TransNet_Student_Nano_NUAA", help='experiment name')
     parser.add_argument('--phase_name', type=str, default="train", help='phase name')
     parser.add_argument('--log_name', type=str, default="log.log", help='log name')
 
