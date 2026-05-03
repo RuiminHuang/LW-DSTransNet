@@ -2,7 +2,7 @@ from argparse import ArgumentParser
 
 import torch
 import torch.utils.data as Data
-from data.data import DataLoaderX, GrokCV_NUAA_SIRST, GrokCV_NUDT_SIRST, GrokCV_IRSTD_1k, GrokCV_SIRST_Aug
+from data.data import DataLoaderX, GrokCV_NUAA_SIRST, GrokCV_NUDT_SIRST, GrokCV_IRSTD_1k
 
 from model.model import DS_TransNet_Student
 from model.model_utils.weight_init import weight_init_normal
