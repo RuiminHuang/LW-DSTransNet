@@ -146,43 +146,39 @@ Before running the code, make sure to update the dataset path in the config file
 
 ## :fire: 5. Train
 
-```shell
-python train.py
-```
+* Step0: Train teacher network
 
-Before training, specify the target datasets in the configuration file:
-
-![train_config](./figures/train_config.png)
-
-To view train process, run TensorBoard with:
+For example, train teacher network DSTransNet on NUDT-SIRST dataset.
 
 ```shell
-tensorboard --port=8010 --samples_per_plugin=images=100000 --logdir=./
+python Step0_train_DS_TransNet_Teacher_NUDT.py
 ```
 
-![train_log](./figures/train_log.png)
+
+* Step1: Train student network
+
+For example, train LW-DSTransNet-Nano on the NUDT-SIRST dataset with DSTransNet as the teacher network.
+
+```shell
+python Step1_train_LW_DS_TransNet_Student_Nano_NUDT.py
+```
 
 
 ## :dart: 6. Test
 
-```shell
-python test.py
-```
+* Step2： Test student network
 
-Before testing, specify the pre-trained weights and target datasets in the configuration file:
-
-![test_config](./figures/test_config.png)
-
-
-To view test results, run TensorBoard with:
+For example, test LW-DSTransNet-Nano on the NUDT-SIRST dataset.
 
 ```shell
-tensorboard --port=8010 --samples_per_plugin=images=100000 --logdir=./
+python Step2_test_LW_DS_TransNet_Student_Nano_NUDT.py
 ```
 
-![train_log1](./figures/test_log1.png)
-![train_log2](./figures/test_log2.png)
+* Step 3: Count Parameters and FLOPs (optional)
 
+```shell
+python Step3_test_Params_FLOPs.py
+```
 
 
 ## :trophy: 7. Benchmark and Model Zoo
@@ -225,7 +221,7 @@ tensorboard --port=8010 --samples_per_plugin=images=100000 --logdir=./
 
 ### :package: 7.3 Model Zoo
 
-TensorBoard logs, train logs, test logs, pre-trained weights, and test results are available on [Google Drive](https://drive.google.com/drive/folders/1Cktwh19m4gm0PVY63o_HWHXe6CXkqhOf?usp=sharing). Just download and unzip it to the [log path](./logs/).
+TensorBoard logs, train logs, test logs, pre-trained weights, and test results are available on [Google Drive](https://drive.google.com/drive/folders/1Nsm6iDoquoiFIv4hxfb3NjfTCyxamyBG?usp=sharing). Just download and unzip it to the [logs path](./logs/).
 
 ## :bookmark_tabs: 8. Citation
 
