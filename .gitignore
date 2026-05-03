@@ -174,4 +174,17 @@ cython_debug/
 .pypirc
 
 # Train and test log
-logs/
+logs/DS_TransNet_Teacher_IRSTD_1k
+logs/DS_TransNet_Teacher_NUAA
+logs/DS_TransNet_Teacher_NUDT
+logs/LW_DS_TransNet_Student_Nano_IRSTD_1k
+logs/LW_DS_TransNet_Student_Nano_NUAA
+logs/LW_DS_TransNet_Student_Nano_NUDT
+logs/LW_DS_TransNet_Student_Nano_NUDT_Adapt_to_SCTransNet
+logs/LW_DS_TransNet_Student_Small_IRSTD_1k
+logs/LW_DS_TransNet_Student_Small_NUAA
+logs/LW_DS_TransNet_Student_Small_NUDT
+logs/LW_DS_TransNet_Student_Tiny_IRSTD_1k
+logs/LW_DS_TransNet_Student_Tiny_NUAA
+logs/LW_DS_TransNet_Student_Tiny_NUDT
+logs/SC_TransNet_Teacher_NUDT
