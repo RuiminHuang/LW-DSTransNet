@@ -142,7 +142,7 @@ The dataset comes from [this GitHub repository](https://github.com/GrokCV/SeRank
 
 Before running the code, make sure to update the dataset path in the config file:
 
-![datasets_path](./figures/datasets_path.png)
+![datasets_path](./figures/Datasets_path.png)
 
 ## :fire: 5. Train
 
